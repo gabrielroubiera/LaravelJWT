@@ -14,6 +14,10 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.verify')->except(["login", "register"]);
+    }
     public function login(Request $request){
         $credentials = $request->only('email', 'password');
 
@@ -61,5 +65,12 @@ class UserController extends Controller
         $token = JWTAuth::fromUser($user);
 
         return $this->STATUSOK('El usuario se ha creado correctamente.', $token);
+    }
+
+    public function logout(){
+        $token = JWTAuth::parseToken()->authenticate();
+        JWTAuth::parseToken()->invalidate( $token );
+
+        return $this->STATUSOK('Has cerrado sesión correctamente', $token);
     }
 }

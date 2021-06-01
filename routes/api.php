@@ -12,4 +12,5 @@ Route::post('login', [UserController::class, 'login']);
 
 Route::group(['middleware' => 'api','prefix' => 'auth'], function() {
     Route::get('me', [ProfileController::class, 'me']);
+    Route::post('logout', [UserController::class, 'logout']);
 });
